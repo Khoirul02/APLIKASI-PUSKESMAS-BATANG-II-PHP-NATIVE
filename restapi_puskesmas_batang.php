@@ -156,7 +156,7 @@ require_once "config.php";
          $check = array('id_pasien'=>'');
          $check_match = count(array_intersect_key($_POST, $check));         
          if($check_match == count($check)){      
-            $query = $connect->query("SELECT * FROM antrian INNER JOIN pasien ON pasien.id = antrian.id_pasien INNER JOIN poli ON poli.id = antrian.id_poli WHERE antrian.id_pasien ='$_POST[id_pasien]'");            
+            $query = $connect->query("SELECT * FROM antrian INNER JOIN pasien ON pasien.id = antrian.id_pasien INNER JOIN poli ON poli.id = antrian.id_poli WHERE antrian.id_pasien ='$_POST[id_pasien]' ORDER BY antrian.id DESC");            
             while($row=mysqli_fetch_object($query))
             {
                $data[] =$row;
