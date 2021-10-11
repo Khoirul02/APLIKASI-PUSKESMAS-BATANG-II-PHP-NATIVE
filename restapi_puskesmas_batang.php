@@ -116,6 +116,7 @@ require_once "config.php";
          $check = array('id_pasien'=>'','id_poli'=>'');
          $check_match = count(array_intersect_key($_POST, $check));
          if($check_match == count($check)){
+               //logic
                $tgl = date('Y-m-d');
                $query_antrian_poli = mysqli_query($connect,"SELECT * FROM antrian WHERE id_poli= '$_POST[id_poli]' AND create_at_antrian like '$tgl%'");
                $total_antrian_poli = mysqli_num_rows($query_antrian_poli);
