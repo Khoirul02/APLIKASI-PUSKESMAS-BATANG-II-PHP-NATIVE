@@ -1,4 +1,5 @@
 <?php
+
 $servername = "localhost";
 $database = "pusk_batang";
 $username = "root";

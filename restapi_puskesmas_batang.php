@@ -74,18 +74,19 @@ require_once "config.php";
    function insert_pasien()
       {
          global $connect;   
-         $check = array('nama_pasien'=>'','no_kk'=>'','nik'=>'' ,'nohp'=>'','tgl_lahir'=>'','jenkel'=>'','alamat'=>'');
+         $check = array('nama_pasien'=>'','no_kk'=>'','nik'=>'','kepala_klrg'=>'','nohp'=>'','tgl_lahir'=>'','jenkel'=>'','alamat'=>'');
          $check_match = count(array_intersect_key($_POST, $check));
          if($check_match == count($check)){
-         
                $result = mysqli_query($connect, "INSERT INTO pasien SET
                nama_pasien = '$_POST[nama_pasien]',
                no_kk = '$_POST[no_kk]',
                nik = '$_POST[nik]',
+               kepala_klrg = '$_POST[kepala_klrg]',
                nohp = '$_POST[nohp]',
                tgl_lahir = '$_POST[tgl_lahir]',
                jenkel = '$_POST[jenkel]',
-               alamat = '$_POST[alamat]'");
+               alamat = '$_POST[alamat]'
+               ");
                
                if($result)
                {
@@ -116,15 +117,24 @@ require_once "config.php";
          $check = array('id_pasien'=>'','id_poli'=>'');
          $check_match = count(array_intersect_key($_POST, $check));
          if($check_match == count($check)){
-               //logic
                $tgl = date('Y-m-d');
                $query_antrian_poli = mysqli_query($connect,"SELECT * FROM antrian WHERE id_poli= '$_POST[id_poli]' AND create_at_antrian like '$tgl%'");
+               $query_poli = mysqli_query($connect,"SELECT * FROM poli WHERE id= '$_POST[id_poli]'");
                $total_antrian_poli = mysqli_num_rows($query_antrian_poli);
+               $data_poli = mysqli_fetch_array($query_poli);
                $antrian_selanjutnya = $total_antrian_poli + 1;
+               if(strlen($antrian_selanjutnya) === 1 ){
+                  $antrian = $data_poli['kode_poli']."00".$antrian_selanjutnya;
+               }elseif(strlen($antrian_selanjutnya) === 2){
+                  $antrian = $data_poli['kode_poli']."0".$antrian_selanjutnya;
+               }else{
+                  $antrian = $data_poli['kode_poli'].$antrian_selanjutnya;
+               }
                $result = mysqli_query($connect, "INSERT INTO antrian SET
                id_pasien='$_POST[id_pasien]' ,
 	            id_poli='$_POST[id_poli]' ,
-	            no_antrian='$antrian_selanjutnya'
+	            no_antrian='$antrian',
+               status='tunggu'
                ");
                
                if($result)
